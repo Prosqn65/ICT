@@ -1,0 +1,31 @@
+Pseudo kód:
+    class Wallet:
+        def __init__(self, user_id, password):
+            self.user_id = user_id
+            self.password = password
+            self.balance = 0
+
+        def login(self, user_id, password):
+            if self.user_id == user_id and self.password == password:
+                return True
+            else:
+                return False
+
+        def deposit(self, amount):
+            self.balance += amount
+
+        def withdraw(self, amount):
+            if self.balance >= amount:
+                self.balance -= amount
+            else:
+                print("Insufficient funds")
+
+        def send_payment(self, recipient, amount):
+            if self.balance >= amount:
+                self.balance -= amount
+                recipient.deposit(amount)
+            else:
+                print("Insufficient funds")
+
+        def get_balance(self):
+            return self.balance
