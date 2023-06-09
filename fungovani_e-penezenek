@@ -1,1 +1,56 @@
+# Python kod:
+from hashlib import sha256
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
 
+
+class Wallet:
+    def __init__(self):
+        self.private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048
+        )
+        self.public_key = self.private_key.public_key()
+        self.balance = 0
+
+    def deposit(self, amount):
+        self.balance += amount
+
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+        else:
+            print("Insufficient funds")
+
+    def send_payment(self, recipient, amount):
+        if self.balance >= amount:
+            self.balance -= amount
+            recipient.deposit(amount)
+        else:
+            print("Insufficient funds")
+
+    def get_balance(self):
+        return self.balance
+
+
+# Příklady použití peněženky
+wallet1 = Wallet()
+wallet2 = Wallet()
+
+# Dobíjení účtu
+wallet1.deposit(100)
+
+# Odeslání platby z peněženky 1 do peněženky 2
+wallet1.send_payment(wallet2, 50)
+
+# Kontrola zůstatku peněženky 1
+print("Wallet 1 balance:", wallet1.get_balance())
+
+# Kontrola zůstatku peněženky 2
+print("Wallet 2 balance:", wallet2.get_balance())
+
+# Výběr z peněženky 2
+wallet2.withdraw(30)
+
+# Kontrola zůstatku peněženky 2 po výběru
+print("Wallet 2 balance:", wallet2.get_balance())
